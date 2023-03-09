@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: catserver
+  name: catserver
+  namespace: catserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catserver
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: catserver
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
+        volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          readOnly: true
+        - name: html-conf
+          mountPath: /usr/share/nginx/html/cats/index.html
+          subPath: cats.html
+          readOnly: true
+        - name: images
+          mountPath: /usr/share/nginx/html/cats/images
+      volumes:
+      - name: nginx-conf
+        configMap:
+          name: nginx-conf
+          items:
+           - key: nginx.conf
+             path: nginx.conf
+      - name: html-conf
+        configMap:
+          name: cats-html
+          items:
+           - key: cats.html
+             path: cats.html
+      - name: images
+        persistentVolumeClaim:
+           claimName: cats-pvc

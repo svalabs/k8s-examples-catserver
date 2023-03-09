@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cats-html
+  namespace: catserver
+data:
+  cats.html: |
+    <h1> Cats are here </h1>
+    <img src="/cats/images/cat1.jpg" width="500px" height="auto">
+    <img src="/cats/images/cat2.jpg" width="500px" height="auto">
